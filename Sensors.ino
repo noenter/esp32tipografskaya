@@ -35,45 +35,54 @@ void level_init() {
       //Serial.print(".");
     }, nullptr, true);
 
-  ts.add(3, 1000, [&](void*) { // Запустим задачу
+  ts.add(3, 2000, [&](void*) { // Запустим задачу
     int lL = analogRead(36);
-    int lH = analogRead(34);
+    int lH = analogRead(34); // поменять местами верхний с аварийным
     int lW = analogRead(35);
 
-    if (lL > linfo && lL < 4060){
-    linfo = lL;
-    String linfo = String(lL);
-    SoketData ("linfo", linfo, jsonRead(configJson,"linfo"));
-    jsonWrite(configJson, "linfo", linfo);
-  }
+    String lSelect = String(lSel);
+    SoketData ("lSelect", lSelect, jsonRead(configJson,"lSelect"));
+    jsonWrite(configJson, "lSelect", lSelect);
+
+
 if (l1 == false){
-  if (lL <= lSel){
+   if (lL <= lSel){
    lLcount = lLcount + 1;
-    if (lLcount = 3){l1 = true;}
-     }}
+    if (lLcount == 3){l1 = true;}
+       }}
 
 if (l2 == false){
-if (lH <= lSel){
+  if (lH <= lSel){
   lHcount = lHcount + 1;
-  if (lHcount = 3){l1 = true;}
+    if (lHcount == 3){l2 = true;}
+   }}
+
+if (l3 == false){
+  if (lW <= lSel){
+  lWcount = lWcount + 1;
+    if (lWcount == 3){l3 = true;}
    }}
 
 if (l1 == true){
-if (lL > lSel){
+  if (lL > lSel){
   lLcount = lLcount - 1;
-  if (lLcount = 0){l1 = false;}
+    if (lLcount == 0){l1 = false;}
    }}
 
 if (l2 == true){
-if (lH > lSel){
+  if (lH > lSel){
   lHcount = lHcount - 1;
-  if (lHcount = 0){l1 = false;}
+    if (lHcount == 0){l2 = false;}
   }}
-
+if (l3 == true){
+  if (lW > lSel){
+  lWcount = lWcount - 1;
+    if (lWcount == 0){l3 = false;}
+  }}
    
     
  //   if (lL <= lSel && lH <= lSel){
-    if (l1 == true && l2 == true){  
+    if (l1 == true && l3 == true){  
       digitalWrite(pumppin, HIGH);
       pumpstat = true;
       pump_Name = "ON";
@@ -81,7 +90,7 @@ if (lH > lSel){
   jsonWrite(configJson, "pump_Name", pump_Name);
   Serial.println(pump_Name);
       }
-    if (l1 == false && l2 == false){
+    if (l1 == false && l3 == false){
       if (pumpstat == true){
        // delay(4000);
         digitalWrite(pumppin,LOW);
