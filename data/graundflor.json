@@ -7,6 +7,20 @@
  "title": "Room",
  "class":"col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6",
  "content": [
+{
+   "type": "link",
+   "title": "Обновление",
+   "action": "/serverIndex",
+   "class": "btn btn-block btn-danger"
+  },{
+   "type": "link",
+   "title": "Главная",
+   "action": "/",
+   "class": "btn btn-block btn-danger"
+  }
+,{
+   "type": "hr"
+  },
   {
    "type": "h5",
    "title": "Подвал",
@@ -42,14 +56,14 @@
   },
 {
    "type": "h4",
-   "title": "Нижний {{lLow}}"
+   "title": "Нижний Уровень - {{l11}} - Счётчик {{lLcoun}} - {{lLow}}"
   },
  {
    "type": "h4",
-   "title": "Верхний {{lHigh}}"
+   "title": "Верхний Уровень - {{l22}} - Счётчик {{lHcoun}} - {{lHigh}}"
   }, {
    "type": "h4",
-   "title": "Аварийный {{lWar}}"
+   "title": "Аварийный Уровень - {{l33}} - Счётчик {{lWcoun}} - {{lWar}}"
   },{
    "type": "hr"
   },{
@@ -57,9 +71,10 @@
   "title": "Насос - {{pump_Name}}",
   "action": "pump",
 "class": "btn btn-block btn-info"
-},{
+},
+{
    "type": "h4",
-   "title": "Насос {{pumpstat}}"
+   "title": "инфо {{linfo}}"
   },{
   "type": "button",
   "title": "Relay1 - {{r1_Name}}",
