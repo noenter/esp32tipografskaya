@@ -65,17 +65,20 @@ if (l3 == false){
 
 
   if (lL > lSel){
+    if (lLcount > 0){
   lLcount = lLcount - 1;
     if (lLcount == 0){l1 = false;}
-   }
+   }}
   if (lH > lSel){
+    if (lHcount > 0){
   lHcount = lHcount - 1;
     if (lHcount == 0){l2 = false;}
-  }
+  }}
   if (lW > lSel){
+    if (lWcount > 0){
   lWcount = lWcount - 1;
     if (lWcount == 0){l3 = false;}
-  }
+  }}
    
     
  //   if (lL <= lSel && lH <= lSel){
@@ -128,7 +131,7 @@ void pump(){
 
 // -----------------  Вывод времени и даты в /config.live.json каждую секунду
 void sec_init() {
-  ts.add(1, 1000, [&](void*) { // Запустим задачу 1 с интервалом 1000ms
+  ts.add(1, 30000, [&](void*) { // Запустим задачу 1 с интервалом 1000ms
     // поместим данные для web страницы в json строку configJson
     // Будем вызывать эту функцию каждый раз при запросе /config.live.json
     // jsonWrite(строка, "ключ", значение_число); Так можно дабавить или обнавить json значение ключа в строке
