@@ -1,10 +1,26 @@
-// -----------------  DHT
+// AHT --- BME --- LEVEL
+void AHT_init() {
+  myAHT1.begin();
+    jsonWrite(configJson, "t1", myAHT1.readTemperature());  // отправить температуру в configJson
+    jsonWrite(configJson, "h1", myAHT1.readHumidity());        // отправить влажность в configJson
+
+    ts.add(4, 30000, [&](void*) { // Запустим задачу 0 с интервалом test
+      String t1 = (String)myAHT1.readTemperature();
+      String h1 = (String)myAHT1.readHumidity();
+      SoketData ("t1", t1, jsonRead(configJson,"t1"));
+      SoketData ("h1", h1, jsonRead(configJson,"h1"));
+      jsonWrite(configJson, "t1", t1);   // отправить температуру в configJson
+      jsonWrite(configJson, "h1", h1);         // отправить влажность в configJson      
+      //Serial.print(".");
+    }, nullptr, true);
+  }
+
 void BME_init() {
   bme1.begin(0x77);
     jsonWrite(configJson, "t0", bme1.readTemperature());  // отправить температуру в configJson
     jsonWrite(configJson, "h0", bme1.readHumidity());        // отправить влажность в configJson
 
-    ts.add(0, 2000, [&](void*) { // Запустим задачу 0 с интервалом test
+    ts.add(0, 30000, [&](void*) { // Запустим задачу 0 с интервалом test
       String t0 = (String)bme1.readTemperature();
       String h0 = (String)bme1.readHumidity();
       SoketData ("t0", t0, jsonRead(configJson,"t0"));
@@ -12,8 +28,24 @@ void BME_init() {
       jsonWrite(configJson, "t0", t0);   // отправить температуру в configJson
       jsonWrite(configJson, "h0", h0);         // отправить влажность в configJson      
       //Serial.print(".");
-    }, nullptr, true);
+
+//  if (hour>8 && hour<22){
+//    if (t0 < t1+10){
+//     digitalWrite(relay1pin, LOW);
+//     r1_Name = "ON";
+//     SoketData ("r1_Name", r1_Name, jsonRead(configJson,"r1_Name"));
+//     jsonWrite(configJson, "r1_Name", r1_Name);
+//       }}
+//       else{
+//  digitalWrite(relay1pin, HIGH);
+//  r1_Name = "OFF";
+//  SoketData ("r1_Name", r1_Name, jsonRead(configJson,"r1_Name"));
+//  jsonWrite(configJson, "r1_Name", r1_Name);
+// }       
+   }
+    , nullptr, true);
   }
+  
 void level_init() {
   pinMode(pumppin, OUTPUT);
   digitalWrite(pumppin, LOW);  // реле выключено
@@ -88,7 +120,7 @@ if (l3 == false){
       pump_Name = "ON";
   SoketData ("pump_Name", pump_Name, jsonRead(configJson,"pump_Name"));
   jsonWrite(configJson, "pump_Name", pump_Name);
-  Serial.println(pump_Name);
+  //Serial.println(pump_Name);
       }
     if (!l1 && !l2){
       if (pumpstat == true){
@@ -97,7 +129,7 @@ if (l3 == false){
         pump_Name = "OFF";
         SoketData ("pump_Name", pump_Name, jsonRead(configJson,"pump_Name"));
         jsonWrite(configJson, "pump_Name", pump_Name);
-        Serial.println(pump_Name);
+        //Serial.println(pump_Name);
      }
     }}, nullptr, true);
 
@@ -108,13 +140,13 @@ void pump(){
   //r1_Name = HTTP.arg(r1); // Получаем значение ssdp из запроса сохраняем в глобальной переменной
   //saveConfig();                 // Функция сохранения данных во Flash пока пустая
   //HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
-  Serial.println(pumpstat);
+  //Serial.println(pumpstat);
   if (pumpstat == true){
   digitalWrite(pumppin, HIGH);
   pump_Name = "ON";
   SoketData ("pump_Name", pump_Name, jsonRead(configJson,"pump_Name"));
   jsonWrite(configJson, "pump_Name", pump_Name);
-  Serial.println(pump_Name);
+  //Serial.println(pump_Name);
   //servo.write(s1);
   //saveConfig();                 // Функция сохранения данных во Flash пока пустая
   HTTP.send(200, "text/plain", "OK");} // отправляем ответ о выполнении
@@ -123,7 +155,7 @@ void pump(){
   pump_Name = "OFF";
   SoketData ("pump_Name", pump_Name, jsonRead(configJson,"pump_Name"));
   jsonWrite(configJson, "pump_Name", pump_Name);
-  Serial.println(pump_Name);
+  //Serial.println(pump_Name);
   //servo.write(0);
   //saveConfig();                 // Функция сохранения данных во Flash пока пустая
   HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении

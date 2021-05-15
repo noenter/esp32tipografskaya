@@ -7,7 +7,7 @@ void Time_init() {
 void timeSynch(int zone){
   if (WiFi.status() == WL_CONNECTED) {
     // Настройка соединения с NTP сервером
-    configTime(zone * 3600, 0, "pool.ntp.org", "ru.pool.ntp.org");
+    configTime(zone * 3600, 0, "pool.ntp.org");
     int i = 0;
     Serial.println("\nWaiting for time");
     while (!time(nullptr) && i < 10) {
@@ -35,22 +35,22 @@ void handle_Time(){
 
 // Получение текущего времени
 String GetTime() {
- time_t now = time(nullptr); // получаем время с помощью библиотеки time.h
- String Time = ""; // Строка для результатов времени
- Time += ctime(&now); // Преобразуем время в строку формата Thu Jan 19 00:55:35 2017
- int i = Time.indexOf(":"); //Ишем позицию первого символа :
- Time = Time.substring(i - 2, i + 6); // Выделяем из строки 2 символа перед символом : и 6 символов после
- return Time; // Возврашаем полученное время
+  struct tm timeinfo;
+  getLocalTime(&timeinfo);
+  hour = timeinfo.tm_hour ;
+  minut = timeinfo.tm_min;
+  sec = timeinfo.tm_sec;
+  String Time = String(hour) + ":" + String(minut); // Строка для результатов времени
+  return Time; // Возврашаем полученное время
 }
 
 // Получение даты
 String GetDate() {
- time_t now = time(nullptr); // получаем время с помощью библиотеки time.h
- String Data = ""; // Строка для результатов времени
- Data += ctime(&now); // Преобразуем время в строку формата Thu Jan 19 00:55:35 2017
- int i = Data.lastIndexOf(" "); //Ишем позицию последнего символа пробел
- String Time = Data.substring(i - 8, i+1); // Выделяем время и пробел
- Data.replace(Time, ""); // Удаляем из строки 8 символов времени и пробел
- Data.replace("\n", ""); // Удаляем символ переноса строки
+ struct tm timeinfo;
+  getLocalTime(&timeinfo);
+  year = timeinfo.tm_year + 1900;
+  mon = timeinfo.tm_mon + 1;
+  day = timeinfo.tm_mday;
+  String Data = String(day) + "." + String(mon) + "." + String(year); // Строка для результатов времени
  return Data; // Возврашаем полученную дату
 }

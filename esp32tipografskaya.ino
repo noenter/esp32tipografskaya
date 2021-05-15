@@ -42,6 +42,7 @@ void setup() {
   Serial.println("Start 13-BME280(0X77)");
 //  DHT_init();
 BME_init();
+AHT_init();
 
 level_init();
 

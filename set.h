@@ -6,22 +6,13 @@
 #include <FS.h>                 //Содержится в пакете. Видео с уроком http://esp8266-arduinoide.ru/step4-fswebserver
 #include <ESPmDNS.h>
 #include <Update.h>
-
-//#include <SPIFFS.h>
-//                    ПЕРЕДАЧА ДАННЫХ НА WEB СТРАНИЦУ. Видео с уроком http://esp8266-arduinoide.ru/step5-datapages/
-//                    ПЕРЕДАЧА ДАННЫХ С WEB СТРАНИЦЫ.  Видео с уроком http://esp8266-arduinoide.ru/step6-datasend/
 #include <ArduinoJson.h>        //Установить из менеджера библиотек. https://arduinojson.org/
-//                    ЗАПИСЬ И ЧТЕНИЕ ПАРАМЕТРОВ КОНФИГУРАЦИИ В ФАЙЛ. Видео с уроком http://esp8266-arduinoide.ru/step7-fileconfig/
-//#include <ESP8266HTTPUpdateServer.h>  //Содержится в пакете.  Видео с уроком http://esp8266-arduinoide.ru/step8-timeupdate/
-//#include <DNSServer.h> //Содержится в пакете.  // Для работы символьных имен в режиме AP отвечает на любой запрос например: 1.ru
 #include <TickerScheduler.h>         //https://github.com/Toshik/TickerScheduler Видео с уроком http://esp8266-arduinoide.ru/step8-timeupdate/
 #include <WebSocketsServer.h>    //https://github.com/Links2004/arduinoWebSockets 
-// Библиотеки устройств
-// #include <DHT.h>                     //https://github.com/markruys/arduino-DHT   Support for DHT11 and DHT22/AM2302/RHT03
-
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
+#include <AHT10.h>
 
 #include "ESP32_MailClient.h"
 #define emailSenderAccount    "esp32home76@gmail.com"    
@@ -32,14 +23,13 @@
 #define emailSubject          "ESP32 Home76"
 SMTPData smtpData;
 
-//#include "BluetoothSerial.h"
-//BluetoothSerial SerialBT;
-
 #define FILESYSTEM SPIFFS
-// You only need to format the filesystem once
 #define FORMAT_FILESYSTEM false
 
 #include <SPIFFS.h>
+
+int year, mon, day;
+int hour, minut, sec;
 
 const int lLow = 36;
 const int lHigh = 34;
@@ -103,30 +93,13 @@ const char* serverIndex =
  "});"
  "</script>";
 
+WebServer HTTP(80);   // Web интерфейс для устройства
+File fsUploadFile;   // Для файловой системы
+TickerScheduler ts(5);   //Планировщик задач (Число задач)
+WebSocketsServer webSocket = WebSocketsServer(81);   // Объект для  webSocket
 
-// Объект для обнавления с web страницы
-//ESP8266HTTPUpdateServer httpUpdater;
-
-// Web интерфейс для устройства
-WebServer HTTP(80);
-
-// Для файловой системы
-File fsUploadFile;
-
-// Для работы символьных имен в режиме AP
-//DNSServer dnsServer;
-
-//Планировщик задач (Число задач)
-TickerScheduler ts(4);
-
-// Объект для  webSocket
-WebSocketsServer webSocket = WebSocketsServer(81);
-
-// Датчик DHT
-//DHT dht;
-//#define dhtPin 4
 Adafruit_BME280 bme1;
-
+AHT10 myAHT1(AHT10_ADDRESS_0X39);
 
 String configSetup = "{}"; // данные для config.setup.json
 String configJson = "{}";  // данные для config.live.json
