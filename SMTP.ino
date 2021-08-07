@@ -1,9 +1,9 @@
 void SMTP_Init(){
   smtpData.setLogin(smtpServer, smtpServerPort, emailSenderAccount, emailSenderPassword);
-  smtpData.setSender("ESP32", emailSenderAccount);
-  smtpData.setPriority("High");
+  smtpData.setSender("ESP32 GroundFloor", emailSenderAccount);    // Подпись, от кого
+  smtpData.setPriority("High");   // Приоритет
   smtpData.setSubject(emailSubject);
-  smtpData.setMessage("Hello World! - ESP Online", false);
+  smtpData.setMessage("Warning ESP32 ReLoad", false);  // Тут текст письма
   smtpData.addRecipient(emailRecipient);
   smtpData.setSendCallback(sendCallback);
 if (!MailClient.sendMail(smtpData))

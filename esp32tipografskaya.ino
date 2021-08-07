@@ -1,55 +1,41 @@
-#include "set.h"
+#include "set.h"  //подключение баблиотек в отдельном файле set.h
 
 void setup() {
 
   Serial.begin(115200);
-  delay(5);
-//  SerialBT.begin("ESP32test"); //Bluetooth device name
-  Serial.println("");
-  //Запускаем файловую систему
+  delay(10);
+  Serial.println("esp32Tipografskaya");
   Serial.println("Start 4-FS");
-  FS_init();
+  FS_init(); //Запускаем файловую систему
   Serial.println("Step7-FileConfig");
   configSetup = readFile("config.json", 4096);
   jsonWrite(configJson, "SSDP", jsonRead(configSetup, "SSDP"));
   Serial.println(configSetup);
   Serial.println("Start 1-WIFI");
-  //Запускаем WIFI
-  WIFIinit();
-  
-  if (!MDNS.begin(host)) { //http://esp32.local
-    Serial.println("Error setting up MDNS responder!");
-    while (1) {
-      delay(1000);
-    }
-  }
+  WIFIinit();   //Запускаем WIFI
+  MDNS.begin(host);  //http://esp32.local
   Serial.println("mDNS responder started");
   Serial.println("Start 8-Time");
-  // Получаем время из сети
-  Time_init();
-  //Настраиваем и запускаем SSDP интерфейс
+  Time_init();       // Получаем время из сети
   Serial.println("Start 3-SSDP");
-  SSDP_init();
-  //Настраиваем и запускаем HTTP интерфейс
+  SSDP_init();       //Настраиваем и запускаем SSDP интерфейс
   Serial.println("Start 2-WebServer");
-  HTTP_init();
+  HTTP_init();      //Настраиваем и запускаем HTTP интерфейс
   //Настраиваем и запускаем webSoket интерфейс
   Serial.println("Start 14-webSoket_init");
-  webSoket_init();
-    // Включаем Вывод времени и даты каждую секунду
+  webSoket_init();   //Настраиваем и запускаем webSoket интерфейс
   Serial.println("Start 13-sec_init");
-  sec_init();
+  sec_init();       // Включаем Вывод времени и даты каждую секунду
   Serial.println("Start 13-BME280(0X77)");
-//  DHT_init();
-BME_init();
-AHT_init();
-
-level_init();
-
-SMTP_Init();
-
-relays_init();
-
+  BME_init();       // Инициализация датчиков BME280
+  Serial.println("Start 15-AHT10");
+  AHT_init();       // Инициализация датчиков AHT10
+  Serial.println("Start 16-Датчики уровней");
+  level_init();     // Инициализация датчиков уровня воды
+  Serial.println("Start 17-SMPT Отправки оповещения на почту");
+  SMTP_Init();      // Подготовка сообщения на почту
+  Serial.println("Start 18-Подготовка реле");
+  relays_init();    // Подготовка реле к работе
 }
 
 void loop() {
@@ -57,7 +43,6 @@ void loop() {
   HTTP.handleClient(); // Работа Web сервера
   yield();
   webSocket.loop(); // Работа webSocket
-//  dnsServer.processNextRequest(); // Для работы DNS в режиме AP
 
 String l11 = String(l1);
 SoketData ("l11", l11, jsonRead(configJson,"l11"));
@@ -82,13 +67,6 @@ jsonWrite(configJson, "lHcoun", lHcoun);
 String lWcoun = String(lWcount);
 SoketData ("lWcoun", lWcoun, jsonRead(configJson,"lWcoun"));
 jsonWrite(configJson, "lWcoun", lWcoun);
-
-//if (Serial.available()) {
-//    SerialBT.write(Serial.read());
-//  }
-//  if (SerialBT.available()) {
-//    Serial.write(SerialBT.read());
-//  }
 
 
 }

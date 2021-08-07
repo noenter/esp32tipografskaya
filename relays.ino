@@ -37,26 +37,15 @@ void relay1(){
 
 void relay2 (){
   r2 = !r2;
-  //r2_Name = HTTP.arg(r2); // Получаем значение ssdp из запроса сохраняем в глобальной переменной
-  //saveConfig();                 // Функция сохранения данных во Flash пока пустая
-  //HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
-  //Serial.println(r2);
   if (r2 == true){
   digitalWrite(relay2pin, LOW);
   r2_Name = "ON";
   SoketData ("r2_Name", r2_Name, jsonRead(configJson,"r2_Name"));
   jsonWrite(configJson, "r2_Name", r2_Name);
-  //Serial.println(r2_Name);
-  //servo.write(s1);
-  //saveConfig();                 // Функция сохранения данных во Flash пока пустая
   HTTP.send(200, "text/plain", "OK");} // отправляем ответ о выполнении
   else{
   digitalWrite(relay2pin, HIGH);
   r2_Name = "OFF";
   SoketData ("r2_Name", r2_Name, jsonRead(configJson,"r2_Name"));
   jsonWrite(configJson, "r2_Name", r2_Name);
-  //Serial.println(r2_Name);
-  //servo.write(0);
-  //saveConfig();                 // Функция сохранения данных во Flash пока пустая
-  HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
   }}

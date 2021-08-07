@@ -23,28 +23,24 @@ void BME_init() {
     ts.add(0, 30000, [&](void*) { // Запустим задачу 0 с интервалом test
       String t0 = (String)bme1.readTemperature();
       String h0 = (String)bme1.readHumidity();
+      float hum0 = bme1.readHumidity();
       SoketData ("t0", t0, jsonRead(configJson,"t0"));
       SoketData ("h0", h0, jsonRead(configJson,"h0"));
       jsonWrite(configJson, "t0", t0);   // отправить температуру в configJson
       jsonWrite(configJson, "h0", h0);         // отправить влажность в configJson      
       //Serial.print(".");
 
-//  if (hour>8 && hour<22){
-//    if (t0 < t1+10){
-//     digitalWrite(relay1pin, LOW);
-//     r1_Name = "ON";
-//     SoketData ("r1_Name", r1_Name, jsonRead(configJson,"r1_Name"));
-//     jsonWrite(configJson, "r1_Name", r1_Name);
-//       }}
-//       else{
-//  digitalWrite(relay1pin, HIGH);
-//  r1_Name = "OFF";
-//  SoketData ("r1_Name", r1_Name, jsonRead(configJson,"r1_Name"));
-//  jsonWrite(configJson, "r1_Name", r1_Name);
-// }       
-   }
-    , nullptr, true);
-  }
+    if (hour>8 && hour<21){
+      if (hum0 > 60){
+        if (r2 == true){digitalWrite(relay2pin, LOW);
+                        r2_Name = "ON";
+                        SoketData ("r2_Name", r2_Name, jsonRead(configJson,"r2_Name"));
+                        jsonWrite(configJson, "r2_Name", r2_Name);}
+        else{ digitalWrite(relay2pin, HIGH);
+              r2_Name = "OFF";
+              SoketData ("r2_Name", r2_Name, jsonRead(configJson,"r2_Name"));
+              jsonWrite(configJson, "r2_Name", r2_Name);}}}}
+, nullptr, true);}
   
 void level_init() {
   pinMode(pumppin, OUTPUT);
@@ -175,15 +171,4 @@ void sec_init() {
     jsonWrite(configJson, "time", timeS); // отправить время в configJson
     jsonWrite(configJson, "date", date); // отправить дату в configJson
   }, nullptr, true);
-}
-/* ---------------- Задание для закрепления материала
-    Заставьте мигать светодиод на любом pin с частотой 5 секунд
-    сделайте новую задачу под индексом 2
-    в /config.live.json отправляйте состояние светодиода с ключем "stateLed"
-    Выводите состояние светодиода на график по запросу вида /charts.json?data=stateLed
-    Процедуру blink_init() инициализируйте в setup
-*/
-
-void blink_init() {
-  // здесь пишите код решения
 }

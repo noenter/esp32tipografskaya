@@ -16,11 +16,11 @@
 
 #include "ESP32_MailClient.h"
 #define emailSenderAccount    "esp32home76@gmail.com"    
-#define emailSenderPassword   "esp987654321"
-#define emailRecipient        "serov-online@mail.ru"
+#define emailSenderPassword   "Esp32987654321"
+#define emailRecipient        "serov-online@mail.ru"      //адрес на который отравлять письма
 #define smtpServer            "smtp.gmail.com"
 #define smtpServerPort        465
-#define emailSubject          "ESP32 Home76"
+#define emailSubject          "ESP32 У меня что-то случилось" // тема письма
 SMTPData smtpData;
 
 #define FILESYSTEM SPIFFS
