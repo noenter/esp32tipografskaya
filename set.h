@@ -95,7 +95,7 @@ const char* serverIndex =
 
 WebServer HTTP(80);   // Web интерфейс для устройства
 File fsUploadFile;   // Для файловой системы
-TickerScheduler ts(5);   //Планировщик задач (Число задач)
+TickerScheduler ts(4);   //Планировщик задач (Число задач)
 WebSocketsServer webSocket = WebSocketsServer(81);   // Объект для  webSocket
 
 Adafruit_BME280 bme1;
