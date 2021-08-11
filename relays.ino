@@ -48,4 +48,5 @@ void relay2 (){
   r2_Name = "OFF";
   SoketData ("r2_Name", r2_Name, jsonRead(configJson,"r2_Name"));
   jsonWrite(configJson, "r2_Name", r2_Name);
+    HTTP.send(200, "text/plain", "OK"); // отправляем ответ о выполнении
   }}
